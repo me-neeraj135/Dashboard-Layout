@@ -1,21 +1,30 @@
 /** @format */
 
 import React, { Component } from "react";
+import withSearch from "./WithSearch";
 
 export class People extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
   render() {
-    let { peopleData } = this.props;
+    let { peopleData, searchValue, handleSearch } = this.props;
     let allPeople = peopleData.map(p => p.people);
+    let filterData = allPeople.map(pArray => {
+      return pArray.filter(p =>
+        p.name.toLowerCase().startsWith(searchValue.toLowerCase())
+      );
+    });
+
     return (
       <div>
-        <input className="bKInt" type="text" placeholder="search.." />
+        <input
+          className="bKInt"
+          type="text"
+          placeholder="search.."
+          value={searchValue}
+          onChange={handleSearch}
+        />
 
         <ul className="pplUl flex flex-wrap-yes justify-between">
-          {allPeople.map(p => {
+          {filterData.map(p => {
             return p.map(p => {
               return (
                 <li key={p.name} className="flex-22">
@@ -32,4 +41,4 @@ export class People extends Component {
   }
 }
 
-export default People;
+export default withSearch(People);
